@@ -1,26 +1,213 @@
 @import "tailwindcss";
 
+/* --- Design tokens ---------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* surfaces */
+  --bg: #fdfbf7;          /* warm off-white */
+  --bg-elev: #fffdf8;     /* cards */
+  --border: #ede7dc;
+  --ink: #18140f;         /* near-black */
+  --muted: #6b645b;
+
+  /* accent */
+  --coral: #ff6b5b;
+  --coral-ink: #b73c2d;
+  --coral-tint: #ffe4df;
+
+  /* section tags */
+  --peach: #fbe4dc;
+  --sky: #dce7f0;
+  --mint: #dfe9de;
+  --peach-ink: #8a3b2b;
+  --sky-ink: #2d4a60;
+  --mint-ink: #2f5037;
+
+  --radius-card: 16px;
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.dark {
+  --bg: #0b0b0c;          /* obsidian, echoing arhaang.com */
+  --bg-elev: #141416;
+  --border: #23232a;
+  --ink: #f4f1ec;
+  --muted: #9a958d;
+
+  --coral: #ff7a6b;
+  --coral-ink: #ff9b8f;
+  --coral-tint: #2a1714;
+
+  --peach: #2a1a14;
+  --sky: #0f2031;
+  --mint: #13241a;
+  --peach-ink: #f4c7b9;
+  --sky-ink: #bcd2e1;
+  --mint-ink: #b3d0ba;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-coral: var(--coral);
+  --color-coral-ink: var(--coral-ink);
+  --color-coral-tint: var(--coral-tint);
+  --color-peach: var(--peach);
+  --color-sky: var(--sky);
+  --color-mint: var(--mint);
+  --color-peach-ink: var(--peach-ink);
+  --color-sky-ink: var(--sky-ink);
+  --color-mint-ink: var(--mint-ink);
+  --font-serif: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+  --font-hand: var(--font-caveat);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* --- Base ------------------------------------------------------------- */
+html, body { height: 100%; }
+html { color-scheme: light dark; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-serif  { font-family: var(--font-fraunces), Georgia, serif; }
+.font-sans   { font-family: var(--font-inter), system-ui, sans-serif; }
+.font-hand   { font-family: var(--font-caveat), cursive; }
+
+/* Page gutters */
+.page {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+.page--narrow { max-width: 720px; }
+.page--wide   { max-width: 1040px; }
+
+/* Card */
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Entry card margin-rule motif */
+.card-binding {
+  position: relative;
+  overflow: hidden;
+}
+.card-binding::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--coral);
+  opacity: .85;
+}
+
+/* Inputs */
+textarea, input[type="text"], input[type="date"] {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+textarea:focus, input:focus {
+  outline: none;
+  border-color: var(--coral);
+  box-shadow: 0 0 0 3px var(--coral-tint);
+}
+textarea { resize: vertical; min-height: 120px; line-height: 1.55; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: .7; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s, color .15s, transform .05s;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--ink);
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--coral); color: #fff; }
+.btn-primary:hover { background: var(--coral-ink); }
+.dark .btn-primary { color: #18140f; }
+.dark .btn-primary:hover { background: #ffb3a8; color: #18140f; }
+.btn-ghost { border-color: var(--border); background: transparent; }
+.btn-ghost:hover { background: var(--bg-elev); border-color: var(--ink); }
+.btn-danger { border-color: var(--border); background: transparent; color: var(--muted); }
+.btn-danger:hover { border-color: var(--coral); color: var(--coral-ink); }
+
+/* Section tag chips */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.tag-peach { background: var(--peach); color: var(--peach-ink); }
+.tag-sky   { background: var(--sky);   color: var(--sky-ink);   }
+.tag-mint  { background: var(--mint);  color: var(--mint-ink);  }
+
+/* Progress pill (hand-lettered accent, used once) */
+.pill-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background: var(--coral-tint);
+  color: var(--coral-ink);
+  border-radius: 999px;
+  font-family: var(--font-caveat), cursive;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Prose */
+.prose { max-width: 62ch; }
+.prose p { margin-block: .75em; line-height: 1.65; white-space: pre-wrap; }
+.prose p:first-child { margin-top: 0; }
+.prose p:last-child { margin-bottom: 0; }
+
+/* --- Print (for /export) --------------------------------------------- */
+@media print {
+  :root {
+    --bg: #ffffff;
+    --bg-elev: #ffffff;
+    --border: #d9d3c6;
+    --ink: #111;
+    --muted: #4a463f;
+    --shadow-card: none;
+  }
+  .no-print { display: none !important; }
+  body { background: #fff; color: #111; }
+  .card { break-inside: avoid; page-break-inside: avoid; }
+  .page { padding-inline: 0; }
+  .print-page-break { break-before: page; page-break-before: always; }
 }
